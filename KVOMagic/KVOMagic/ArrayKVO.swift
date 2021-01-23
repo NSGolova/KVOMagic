@@ -76,6 +76,6 @@ class ArrayWrapper: NSObject {
     }
 }
 
-extension String {
+public extension String {
     static var arrayKVO: String { "$" }
 }

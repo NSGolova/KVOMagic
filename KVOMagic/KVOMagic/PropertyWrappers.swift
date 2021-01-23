@@ -34,8 +34,8 @@ extension NSObject {
     }
 }
 
-class WrapperOwner: NSObject {
-    override init() {
+open class WrapperOwner: NSObject {
+    public override init() {
         super.init()
         
         initWrappers()
@@ -43,16 +43,16 @@ class WrapperOwner: NSObject {
 }
 
 @propertyWrapper
-class UIProperty<PropertyType>: ObjectOwnedWrapper {
+public class UIProperty<PropertyType>: ObjectOwnedWrapper {
     var ownerKeypath: String?
     var owner: NSObject?
     
-    init(wrappedValue: PropertyType) {
+    public init(wrappedValue: PropertyType) {
         storredValue = wrappedValue
     }
     
     var storredValue: PropertyType
-    var wrappedValue: PropertyType {
+    public var wrappedValue: PropertyType {
         get {
             storredValue
         }
@@ -104,7 +104,7 @@ extension NSObject {
 }
 
 @propertyWrapper
-class Computed<PropertyType, Owner>: OwnedWrapper where Owner: NSObject {
+public class Computed<PropertyType, Owner>: OwnedWrapper where Owner: NSObject {
     let affectings: [String]
     let block: (Owner) -> PropertyType
     
@@ -153,7 +153,7 @@ class Computed<PropertyType, Owner>: OwnedWrapper where Owner: NSObject {
     
     // typeProvider is used only for generics.
     // Should be `self` in majority of cases.
-    init(_ block: @escaping (Owner) -> PropertyType, _ typeProvider: (Owner) -> () -> Owner, changeRate: TimeInterval = 0.1, _ affectings: String...) {
+    public init(_ block: @escaping (Owner) -> PropertyType, _ typeProvider: (Owner) -> () -> Owner, changeRate: TimeInterval = 0.1, _ affectings: String...) {
         self.affectings = affectings
         self.block = block
         self.changeRate = changeRate
@@ -164,7 +164,7 @@ class Computed<PropertyType, Owner>: OwnedWrapper where Owner: NSObject {
     private let changeRate: TimeInterval
     
     var storedValue: PropertyType?
-    var wrappedValue: PropertyType {
+    public var wrappedValue: PropertyType {
         storedValue ?? block(owner)
     }
     
@@ -175,7 +175,7 @@ class Computed<PropertyType, Owner>: OwnedWrapper where Owner: NSObject {
 
 // Revisit me after Swift has templates implemented
 @propertyWrapper
-class Computed1<PropertyType, Owner, Affected>: OwnedWrapper where Owner: NSObject {
+public class Computed1<PropertyType, Owner, Affected>: OwnedWrapper where Owner: NSObject {
     let affecting: KeyPath<Owner, Affected>
     let block: (Affected) -> PropertyType
     
@@ -203,11 +203,11 @@ class Computed1<PropertyType, Owner, Affected>: OwnedWrapper where Owner: NSObje
     }
 
     var storedValue: PropertyType?
-    var wrappedValue: PropertyType {
+    public var wrappedValue: PropertyType {
         storedValue ?? block(owner[keyPath: affecting])
     }
     
-    init(_ block: @escaping (Affected) -> PropertyType, _ typeProvider: (Owner) -> () -> Owner, _ affecting: KeyPath<Owner, Affected>) {
+    public init(_ block: @escaping (Affected) -> PropertyType, _ typeProvider: (Owner) -> () -> Owner, _ affecting: KeyPath<Owner, Affected>) {
         self.affecting = affecting
         self.block = block
     }
@@ -218,7 +218,7 @@ class Computed1<PropertyType, Owner, Affected>: OwnedWrapper where Owner: NSObje
 }
 
 @propertyWrapper
-class Computed2<PropertyType, Owner, Affected1, Affected2>: OwnedWrapper where Owner: NSObject {
+public class Computed2<PropertyType, Owner, Affected1, Affected2>: OwnedWrapper where Owner: NSObject {
     let affectings: (KeyPath<Owner, Affected1>, KeyPath<Owner, Affected2>)
     let block: (Affected1, Affected2) -> PropertyType
     
@@ -248,11 +248,11 @@ class Computed2<PropertyType, Owner, Affected1, Affected2>: OwnedWrapper where O
         }
     }
     var storedValue: PropertyType?
-    var wrappedValue: PropertyType {
+    public var wrappedValue: PropertyType {
         storedValue ?? block(owner[keyPath: affectings.0], owner[keyPath: affectings.1])
     }
     
-    init(_ block: @escaping (Affected1, Affected2) -> PropertyType, _ typeProvider: (Owner) -> () -> Owner, _ affecting1: KeyPath<Owner, Affected1>, _ affecting2: KeyPath<Owner, Affected2>) {
+    public init(_ block: @escaping (Affected1, Affected2) -> PropertyType, _ typeProvider: (Owner) -> () -> Owner, _ affecting1: KeyPath<Owner, Affected1>, _ affecting2: KeyPath<Owner, Affected2>) {
         self.affectings = (affecting1, affecting2)
         self.block = block
     }
@@ -263,7 +263,7 @@ class Computed2<PropertyType, Owner, Affected1, Affected2>: OwnedWrapper where O
 }
 
 @propertyWrapper
-class Computed3<T, M, U1, U2, U3>: OwnedWrapper where M: NSObject {
+public class Computed3<T, M, U1, U2, U3>: OwnedWrapper where M: NSObject {
     let affectings: (KeyPath<M, U1>, KeyPath<M, U2>, KeyPath<M, U3>)
     let block: (U1, U2, U3) -> T
     
@@ -295,14 +295,14 @@ class Computed3<T, M, U1, U2, U3>: OwnedWrapper where M: NSObject {
         }
     }
 
-    init(_ block: @escaping (U1, U2, U3) -> T, _ typeProvider: (M) -> () -> M, _ affecting1: KeyPath<M, U1>, _ affecting2: KeyPath<M, U2>, _ affecting3: KeyPath<M, U3>) {
+    public init(_ block: @escaping (U1, U2, U3) -> T, _ typeProvider: (M) -> () -> M, _ affecting1: KeyPath<M, U1>, _ affecting2: KeyPath<M, U2>, _ affecting3: KeyPath<M, U3>) {
         
         self.affectings = (affecting1, affecting2, affecting3)
         self.block = block
     }
     
     var storedValue: T?
-    var wrappedValue: T {
+    public var wrappedValue: T {
         storedValue ?? block(owner[keyPath: affectings.0], owner[keyPath: affectings.1], owner[keyPath: affectings.2])
     }
     
@@ -311,14 +311,14 @@ class Computed3<T, M, U1, U2, U3>: OwnedWrapper where M: NSObject {
     }
 }
 
-class ArrayOwner: WrapperOwner {
-    override func value(forKey key: String) -> Any? {
+open class ArrayOwner: WrapperOwner {
+    public override func value(forKey key: String) -> Any? {
         arrayCompatibleValue(forKey: key, defaultValue: { super.value(forKey: $0) })
     }
     
     // Don't reorder this calls!
     // ...except you know what you're doing
-    override func willChangeValue(forKey key: String) {
+    public override func willChangeValue(forKey key: String) {
         if wrappers[key] != nil {
             super.willChangeValue(forKey: .arrayKVO + key)
         }
@@ -326,7 +326,7 @@ class ArrayOwner: WrapperOwner {
         super.willChangeValue(forKey: key)
     }
     
-    override func didChangeValue(forKey key: String) {
+    public override func didChangeValue(forKey key: String) {
         super.didChangeValue(forKey: key)
         
         if wrappers[key] != nil {
