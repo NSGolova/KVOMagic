@@ -84,12 +84,16 @@ class Contact: WrapperOwner {
 }
 ```
 There are four flavours:
-`@Computed1(<# computing block #>, self,<# .\KeyPath #>) @objc dynamic var<# name #>`
-`@Computed2(<#computing block#>, self,<#.\KeyPath1#>, <#.\KeyPath2#>) @objc dynamic var <#name#>`
-`@Computed3(<#computing block#>, self,<#.\KeyPath1#>, <#.\KeyPath2#>, <#.\KeyPath3#>) @objc dynamic var <#name#>`
+```swift
+@Computed1({ $0 }, self, \.keyPath) @objc dynamic var name
+@Computed2({ $0, $1 }, self, \.keyPath1, \.keyPath2) @objc dynamic var name
+@Computed3({ $0, $1, $2 }, self, \.keyPath1, \.keyPath2, \.keyPath3) @objc dynamic var name
+```
 These three are type-safe and use Swift KeyPath. Every time value for any of provided properties will change, the computing block will be called with an appropriate count of arguments.
 
-`@Computed(<#computing block#>, self, #keyPath("<#keypath#>")) @objc dynamic var <#name#>`
+```swift
+@Computed({ `self` in }, self, #keyPath("stringKeypath")) @objc dynamic var name
+```
 This one is using String keyPath and will pass `self` as an argument to "computing block". This property wrapper can accept various count of affecting keyPaths.
 
 ### AddObserver with auto removing
@@ -113,7 +117,7 @@ Obj-c equivalent with string keyPath.
 
 ### Code snippets
 
-Copy content of the [Code snippets]("/KVOMagic/Code snippets") folder to ‘~/Library/Developer/Xcode/UserData/CodeSnippets’. Or just copy-paste from here.
+Copy content of the [Code snippets](/KVOMagic/CodeSnippets) folder to ‘~/Library/Developer/Xcode/UserData/CodeSnippets’.
 
 ## Samples
 

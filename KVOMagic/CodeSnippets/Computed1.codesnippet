@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>IDECodeSnippetCompletionPrefix</key>
-	<string>comp2</string>
+	<string>comp1</string>
 	<key>IDECodeSnippetCompletionScopes</key>
 	<array>
 		<string>All</string>
 	</array>
 	<key>IDECodeSnippetContents</key>
-	<string>@Computed2(&lt;#computing block#&gt;, self,&lt;#.\KeyPath1#&gt;, &lt;#.\KeyPath2#&gt;) @objc dynamic var &lt;#name#&gt;</string>
+	<string>@Computed1(&lt;#computing block#&gt;, self, &lt;#\.keyPath#&gt;) @objc dynamic var &lt;#name#&gt;</string>
 	<key>IDECodeSnippetIdentifier</key>
-	<string>C473C27C-C114-4059-AD5C-BDCB96E81042</string>
+	<string>F111F601-54CB-42E0-9931-996C089FF776</string>
 	<key>IDECodeSnippetLanguage</key>
 	<string>Xcode.SourceCodeLanguage.Swift</string>
 	<key>IDECodeSnippetSummary</key>
-	<string>Property wrapper for encapsulating calculated from two values property.</string>
+	<string>Property wrapper for encapsulating calculated property.</string>
 	<key>IDECodeSnippetTitle</key>
-	<string>Computed 2</string>
+	<string>Computed 1</string>
 	<key>IDECodeSnippetUserSnippet</key>
 	<true/>
 	<key>IDECodeSnippetVersion</key>

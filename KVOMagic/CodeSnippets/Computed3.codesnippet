@@ -9,7 +9,7 @@
 		<string>All</string>
 	</array>
 	<key>IDECodeSnippetContents</key>
-	<string>@Computed3(&lt;#computing block#&gt;, self,&lt;#.\KeyPath1#&gt;, &lt;#.\KeyPath2#&gt;, &lt;#.\KeyPath3#&gt;) @objc dynamic var &lt;#name#&gt;</string>
+	<string>@Computed3(&lt;#computing block#&gt;, self, &lt;#\.keyPath1#&gt;', &lt;#\.keyPath2#&gt;, &lt;#\.keyPath3#&gt;) @objc dynamic var &lt;#name#&gt;</string>
 	<key>IDECodeSnippetIdentifier</key>
 	<string>5608F4BC-3D3A-40BF-AF18-89FA64AD0AD6</string>
 	<key>IDECodeSnippetLanguage</key>

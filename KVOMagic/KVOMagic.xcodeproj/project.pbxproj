@@ -33,6 +33,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B944C51325E59C8500319031 /* Package.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = SOURCE_ROOT; };
 		B97A93A725E43894003CF68F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
 		B97A93AB25E43BB1003CF68F /* ArrayKVOTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayKVOTests.swift; sourceTree = "<group>"; };
 		B97A93B125E43C5F003CF68F /* TestObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestObjects.swift; sourceTree = "<group>"; };
@@ -73,6 +74,7 @@
 		B97A93A625E4387C003CF68F /* GitStuff */ = {
 			isa = PBXGroup;
 			children = (
+				B944C51325E59C8500319031 /* Package.swift */,
 				B97A93A725E43894003CF68F /* README.md */,
 			);
 			name = GitStuff;
@@ -419,6 +421,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = dev.golova.KVOMagic;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos watchos watchsimulator appletvos appletvsimulator macosx";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -448,6 +451,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = dev.golova.KVOMagic;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos watchos watchsimulator appletvos appletvsimulator macosx";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
