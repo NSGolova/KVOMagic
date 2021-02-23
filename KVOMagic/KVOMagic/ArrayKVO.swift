@@ -41,15 +41,17 @@ class ArrayWrapper: NSObject {
             }
         }
     }
+    unowned(unsafe) var owner: NSObject?
     
     init?(array: Any?, owner: NSObject, keyPath: String) {
         guard let array = array as? NSArray else { return nil }
         self.array = array
+        self.owner = owner
         
         super.init()
         
-        owner.startObserving(keyPath) { [weak self, weak owner] _, _ in
-            guard let newArray = owner?.value(forKeyPath: keyPath) as? NSArray else { return }
+        owner.startObserving(keyPath) { [weak self] _, _ in
+            guard let newArray = self?.owner?.value(forKeyPath: keyPath) as? NSArray else { return }
             self?.array = newArray
         }
     }

@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B97A93A825E43894003CF68F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = B97A93A725E43894003CF68F /* README.md */; };
+		B97A93AC25E43BB1003CF68F /* ArrayKVOTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97A93AB25E43BB1003CF68F /* ArrayKVOTests.swift */; };
+		B97A93B225E43C5F003CF68F /* TestObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97A93B125E43C5F003CF68F /* TestObjects.swift */; };
+		B97A93B625E43F2C003CF68F /* ObservingUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97A93B525E43F2C003CF68F /* ObservingUtilsTests.swift */; };
+		B97A93C025E5140B003CF68F /* PropertyWrappersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97A93BF25E5140B003CF68F /* PropertyWrappersTests.swift */; };
 		B9FD2A9725B70EBE006A31AE /* KVOMagic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9FD2A8D25B70EBE006A31AE /* KVOMagic.framework */; };
 		B9FD2A9C25B70EBE006A31AE /* KVOMagicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9FD2A9B25B70EBE006A31AE /* KVOMagicTests.swift */; };
 		B9FD2A9E25B70EBE006A31AE /* KVOMagic.h in Headers */ = {isa = PBXBuildFile; fileRef = B9FD2A9025B70EBE006A31AE /* KVOMagic.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -28,6 +33,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B97A93A725E43894003CF68F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
+		B97A93AB25E43BB1003CF68F /* ArrayKVOTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayKVOTests.swift; sourceTree = "<group>"; };
+		B97A93B125E43C5F003CF68F /* TestObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestObjects.swift; sourceTree = "<group>"; };
+		B97A93B525E43F2C003CF68F /* ObservingUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservingUtilsTests.swift; sourceTree = "<group>"; };
+		B97A93BF25E5140B003CF68F /* PropertyWrappersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PropertyWrappersTests.swift; sourceTree = "<group>"; };
 		B9FD2A8D25B70EBE006A31AE /* KVOMagic.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = KVOMagic.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9FD2A9025B70EBE006A31AE /* KVOMagic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVOMagic.h; sourceTree = "<group>"; };
 		B9FD2A9125B70EBE006A31AE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -60,11 +70,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B97A93A625E4387C003CF68F /* GitStuff */ = {
+			isa = PBXGroup;
+			children = (
+				B97A93A725E43894003CF68F /* README.md */,
+			);
+			name = GitStuff;
+			path = KVOMagic;
+			sourceTree = "<group>";
+		};
 		B9FD2A8325B70EBE006A31AE = {
 			isa = PBXGroup;
 			children = (
 				B9FD2A8F25B70EBE006A31AE /* KVOMagic */,
 				B9FD2A9A25B70EBE006A31AE /* KVOMagicTests */,
+				B97A93A625E4387C003CF68F /* GitStuff */,
 				B9FD2A8E25B70EBE006A31AE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -94,6 +114,10 @@
 		B9FD2A9A25B70EBE006A31AE /* KVOMagicTests */ = {
 			isa = PBXGroup;
 			children = (
+				B97A93B125E43C5F003CF68F /* TestObjects.swift */,
+				B97A93B525E43F2C003CF68F /* ObservingUtilsTests.swift */,
+				B97A93AB25E43BB1003CF68F /* ArrayKVOTests.swift */,
+				B97A93BF25E5140B003CF68F /* PropertyWrappersTests.swift */,
 				B9FD2A9B25B70EBE006A31AE /* KVOMagicTests.swift */,
 				B9FD2A9D25B70EBE006A31AE /* Info.plist */,
 			);
@@ -201,6 +225,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B97A93A825E43894003CF68F /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,7 +255,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B97A93AC25E43BB1003CF68F /* ArrayKVOTests.swift in Sources */,
 				B9FD2A9C25B70EBE006A31AE /* KVOMagicTests.swift in Sources */,
+				B97A93B225E43C5F003CF68F /* TestObjects.swift in Sources */,
+				B97A93C025E5140B003CF68F /* PropertyWrappersTests.swift in Sources */,
+				B97A93B625E43F2C003CF68F /* ObservingUtilsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
