@@ -18,8 +18,13 @@ jobs:
     runs-on: macos-latest
 
     steps:
+    - uses: actions/checkout@v2
+    
+    - name: Print
+      run: echo $(ls)
+      
     - name: Build
-      run: xcodebuild build -scheme KVOMagic -derivedDataPath ci_build -configuration Release
+      run: xcodebuild build -project KVOMagic/KVOMagic.xcodeproj -scheme KVOMagic -derivedDataPath ci_build -configuration Release
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
@@ -30,8 +35,10 @@ jobs:
     runs-on: macos-latest
 
     steps:
+    - uses: actions/checkout@v2
+    
     - name: Build
-      run: xcodebuild build -scheme KVOMagic -derivedDataPath ci_build -configuration Release -destination generic/platform=iOS
+      run: xcodebuild build -project KVOMagic/KVOMagic.xcodeproj -scheme KVOMagic -derivedDataPath ci_build -configuration Release -destination generic/platform=iOS
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
@@ -42,8 +49,10 @@ jobs:
     runs-on: macos-latest
 
     steps:
+    - uses: actions/checkout@v2
+    
     - name: Build
-      run: xcodebuild build -scheme KVOMagic -derivedDataPath ci_build -configuration Release -destination generic/platform=tvOS
+      run: xcodebuild build -project KVOMagic/KVOMagic.xcodeproj -scheme KVOMagic -derivedDataPath ci_build -configuration Release -destination generic/platform=tvOS
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2
