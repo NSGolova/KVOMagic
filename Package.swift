@@ -10,7 +10,7 @@ let package = Package(
     targets: [
         .target(
             name: "KVOMagic",
-            path: "KVOMagic"
+            path: "KVOMagic/KVOMagic"
         )
     ]
 )

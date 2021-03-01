@@ -42,7 +42,7 @@ extension WrapperOwnerProtocol where Self: NSObject {
 
 extension WrapperOwnerProtocol {
     
-    @available(OSXApplicationExtension 10.15, *)
+    @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
     public func initWrappers() {
         let mirror = Mirror(reflecting: self)
         for (key, value) in mirror.children {
@@ -63,7 +63,7 @@ open class WrapperOwner: NSObject, WrapperOwnerProtocol {
     }
 }
 
-@available(OSXApplicationExtension 10.15, *)
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 open class PureWrapperOwner: WrapperOwnerProtocol {
     
     public init() {
@@ -340,7 +340,7 @@ public class Computed3<PropertyType, Owner, A, B, C>: OwnedWrapper where Owner: 
     }
 }
 
-@available(OSXApplicationExtension 10.15, *)
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 @propertyWrapper
 public class ObservableArray<T>: ObservableObject where T: ObservableObject  {
 
@@ -372,7 +372,7 @@ public class ObservableArray<T>: ObservableObject where T: ObservableObject  {
     }
 }
 
-@available(OSXApplicationExtension 10.15, *)
+@available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 @propertyWrapper
 public class FromArray<PropertyType, Owner, Value>: OwnedWrapper
 where Owner: ObservableObject,
