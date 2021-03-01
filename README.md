@@ -6,7 +6,7 @@ The framework to enhance KVO usage in Swift.
 
 - Array KVO
 - Affecting property wrapper 
-- AddObserver with auto removing
+- AddObserver with auto removing (obj-c runtime only)
 
 ## Installing
 
@@ -37,7 +37,7 @@ After successfully retrieved the package and added it to your project, just impo
 
 Grab last artifacts from [GithubActions](https://github.com/radulov/KVOMagic/actions) or from [Release](https://github.com/radulov/KVOMagic/releases) page
 
-## Usage
+## Usage (Obj-c runtime based)
 
 ### Array KVO
 
@@ -118,6 +118,47 @@ Obj-c equivalent with string keyPath.
 ### Code snippets
 
 Copy content of the [Code snippets](/KVOMagic/CodeSnippets) folder to ‘~/Library/Developer/Xcode/UserData/CodeSnippets’.
+
+## Usage (Combine based)
+
+### Array KVO
+
+Use `@ObservableArray` property wrapper to send notifications from owner for every change in any object in array.
+Example:
+```swift
+class Contact: ObservableObject {
+    @Published var name: String?
+    @Published var surname: String?
+}
+class ContactsOwner: ObservableObject {
+    @ObservableArray var contacts = [Contact]()
+}
+
+let owner = ContactsOwner()
+owner.contacts[2].name = "test" // This will send notification for `owner`
+```
+Note, owner and objects in array should conforms to `ObservableObject`
+
+### Affecting property wrapper
+
+Use `@FromArray` property wrapper. It's syntax similar to `@ComputedX`.
+Example:
+```swift
+class Contact: ObservableObject {
+    @Published var name: String?
+}
+class ContactsOwner: PureWrapperOwner {
+    @ObservableArray var contacts = [Contact]()
+    @FromArray({ contacts in contacts.first { $0.name == "John" }}, /ContactsOwner.$contacts) var anyJohn
+}
+
+let owner = ContactsOwner()
+owner.contacts[2].name = "John" // This will send notification for `anyJohn`
+```
+Note: 
+- owner should conforms to `WrapperOwnerProtocol` or `PureWrapperOwner` 
+- objects in array should conforms to `ObservableObject`
+- array should use `@ObservableArray`
 
 ## Samples
 

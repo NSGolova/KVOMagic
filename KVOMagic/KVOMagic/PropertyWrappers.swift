@@ -6,6 +6,8 @@
 //  Copyright © 2021 Viktor Radulov. All rights reserved.
 
 import Foundation
+import Combine
+import SwiftUI
 
 protocol OwnedWrapper {
     var anyOwner: Any? { get set }
@@ -17,8 +19,12 @@ protocol ObjectOwnedWrapper {
     var ownerKeypath: String? { get set }
 }
 
-extension NSObject {
-    func initWrappers() {
+public protocol WrapperOwnerProtocol: class {
+    func initWrappers()
+}
+
+extension WrapperOwnerProtocol where Self: NSObject {
+    public func initWrappers() {
         let mirror = Mirror(reflecting: self)
         for (key, value) in mirror.children {
             guard let keyPath = key?.replacingOccurrences(of: "_", with: "") else { continue }
@@ -34,10 +40,33 @@ extension NSObject {
     }
 }
 
-open class WrapperOwner: NSObject {
+extension WrapperOwnerProtocol {
+    
+    @available(OSXApplicationExtension 10.15, *)
+    public func initWrappers() {
+        let mirror = Mirror(reflecting: self)
+        for (key, value) in mirror.children {
+            guard let keyPath = key?.replacingOccurrences(of: "_", with: "") else { continue }
+            if var wrapper = value as? OwnedWrapper {
+                wrapper.ownerKeypath = keyPath
+                wrapper.anyOwner = self
+            }
+        }
+    }
+}
+
+open class WrapperOwner: NSObject, WrapperOwnerProtocol {
     public override init() {
         super.init()
         
+        initWrappers()
+    }
+}
+
+@available(OSXApplicationExtension 10.15, *)
+open class PureWrapperOwner: WrapperOwnerProtocol {
+    
+    public init() {
         initWrappers()
     }
 }
@@ -175,9 +204,9 @@ public class Computed<PropertyType, Owner>: OwnedWrapper where Owner: NSObject {
 
 // Revisit me after Swift has templates implemented
 @propertyWrapper
-public class Computed1<PropertyType, Owner, Affected>: OwnedWrapper where Owner: NSObject {
-    let affecting: KeyPath<Owner, Affected>
-    let block: (Affected) -> PropertyType
+public class Computed1<PropertyType, Owner, A>: OwnedWrapper where Owner: NSObject {
+    let affecting: KeyPath<Owner, A>
+    let block: (A) -> PropertyType
     
     private var owner: Owner! {
         didSet {
@@ -207,7 +236,7 @@ public class Computed1<PropertyType, Owner, Affected>: OwnedWrapper where Owner:
         storedValue ?? block(owner[keyPath: affecting])
     }
     
-    public init(_ block: @escaping (Affected) -> PropertyType, _ typeProvider: (Owner) -> () -> Owner, _ affecting: KeyPath<Owner, Affected>) {
+    public init(_ block: @escaping (A) -> PropertyType, _ typeProvider: (Owner) -> () -> Owner, _ affecting: KeyPath<Owner, A>) {
         self.affecting = affecting
         self.block = block
     }
@@ -218,9 +247,9 @@ public class Computed1<PropertyType, Owner, Affected>: OwnedWrapper where Owner:
 }
 
 @propertyWrapper
-public class Computed2<PropertyType, Owner, Affected1, Affected2>: OwnedWrapper where Owner: NSObject {
-    let affectings: (KeyPath<Owner, Affected1>, KeyPath<Owner, Affected2>)
-    let block: (Affected1, Affected2) -> PropertyType
+public class Computed2<PropertyType, Owner, A, B>: OwnedWrapper where Owner: NSObject {
+    let affectings: (KeyPath<Owner, A>, KeyPath<Owner, B>)
+    let block: (A, B) -> PropertyType
     
     private var owner: Owner! {
         didSet {
@@ -252,7 +281,7 @@ public class Computed2<PropertyType, Owner, Affected1, Affected2>: OwnedWrapper 
         storedValue ?? block(owner[keyPath: affectings.0], owner[keyPath: affectings.1])
     }
     
-    public init(_ block: @escaping (Affected1, Affected2) -> PropertyType, _ typeProvider: (Owner) -> () -> Owner, _ affecting1: KeyPath<Owner, Affected1>, _ affecting2: KeyPath<Owner, Affected2>) {
+    public init(_ block: @escaping (A, B) -> PropertyType, _ typeProvider: (Owner) -> () -> Owner, _ affecting1: KeyPath<Owner, A>, _ affecting2: KeyPath<Owner, B>) {
         self.affectings = (affecting1, affecting2)
         self.block = block
     }
@@ -263,11 +292,11 @@ public class Computed2<PropertyType, Owner, Affected1, Affected2>: OwnedWrapper 
 }
 
 @propertyWrapper
-public class Computed3<T, M, U1, U2, U3>: OwnedWrapper where M: NSObject {
-    let affectings: (KeyPath<M, U1>, KeyPath<M, U2>, KeyPath<M, U3>)
-    let block: (U1, U2, U3) -> T
+public class Computed3<PropertyType, Owner, A, B, C>: OwnedWrapper where Owner: NSObject {
+    let affectings: (KeyPath<Owner, A>, KeyPath<Owner, B>, KeyPath<Owner, C>)
+    let block: (A, B, C) -> PropertyType
     
-    private var owner: M! {
+    private var owner: Owner! {
         didSet {
             updateStoredValue()
         }
@@ -278,10 +307,10 @@ public class Computed3<T, M, U1, U2, U3>: OwnedWrapper where M: NSObject {
             return owner
         }
         set {
-            guard let owner = newValue as? M else { return }
+            guard let owner = newValue as? Owner else { return }
             self.owner = owner
             
-            let observing: (M) -> Void = { [weak self] owner in
+            let observing: (Owner) -> Void = { [weak self] owner in
                 guard let self = self, let ownerKeypath = self.ownerKeypath else { return }
                 
                 owner.willChangeValue(forKey: ownerKeypath)
@@ -295,19 +324,111 @@ public class Computed3<T, M, U1, U2, U3>: OwnedWrapper where M: NSObject {
         }
     }
 
-    public init(_ block: @escaping (U1, U2, U3) -> T, _ typeProvider: (M) -> () -> M, _ affecting1: KeyPath<M, U1>, _ affecting2: KeyPath<M, U2>, _ affecting3: KeyPath<M, U3>) {
+    public init(_ block: @escaping (A, B, C) -> PropertyType, _ typeProvider: (Owner) -> () -> Owner, _ affecting1: KeyPath<Owner, A>, _ affecting2: KeyPath<Owner, B>, _ affecting3: KeyPath<Owner, C>) {
         
         self.affectings = (affecting1, affecting2, affecting3)
         self.block = block
     }
     
-    var storedValue: T?
-    public var wrappedValue: T {
+    var storedValue: PropertyType?
+    public var wrappedValue: PropertyType {
         storedValue ?? block(owner[keyPath: affectings.0], owner[keyPath: affectings.1], owner[keyPath: affectings.2])
     }
     
     func updateStoredValue() {
         storedValue = block(owner[keyPath: affectings.0], owner[keyPath: affectings.1], owner[keyPath: affectings.2])
+    }
+}
+
+@available(OSXApplicationExtension 10.15, *)
+@propertyWrapper
+public class ObservableArray<T>: ObservableObject where T: ObservableObject  {
+
+    @Published public var wrappedValue = [T]() {
+        didSet {
+            observeChildrenChanges()
+        }
+    }
+    var cancellables = [AnyCancellable]()
+
+    public init(wrappedValue: [T]) {
+        self.wrappedValue = wrappedValue
+        
+        observeChildrenChanges()
+    }
+
+    func observeChildrenChanges() {
+        wrappedValue.forEach({
+            let cancellable = $0.objectWillChange.sink { _ in
+                self.objectWillChange.send()
+            }
+
+            self.cancellables.append(cancellable)
+        })
+    }
+    
+    public var projectedValue: ObservableArray<T> {
+        self
+    }
+}
+
+@available(OSXApplicationExtension 10.15, *)
+@propertyWrapper
+public class FromArray<PropertyType, Owner, Value>: OwnedWrapper
+where Owner: ObservableObject,
+      Owner.ObjectWillChangePublisher == ObservableObjectPublisher,
+      Value: ObservableObject {
+    
+    var ownerKeypath: String?
+    let affectings: KeyPath<Owner, ObservableArray<Value>>
+    let block: ([Value]) -> PropertyType
+    
+    private var owner: Owner! {
+        didSet {
+            updateStoredValue()
+            
+            observer = owner[keyPath: affectings].objectWillChange.receive(on: DispatchQueue.main).sink { [weak self] _ in
+                self?.owner.objectWillChange.send()
+                self?.updateStoredValue()
+            }
+        }
+    }
+    var observer: AnyCancellable?
+    var anyOwner: Any? {
+        get {
+            return owner
+        }
+        set {
+            guard let owner = newValue as? Owner else { return }
+            self.owner = owner
+            
+            updateStoredValue()
+        }
+    }
+    
+    public static subscript(
+          instanceSelf observed: Owner,
+          wrapped wrappedKeyPath: ReferenceWritableKeyPath<Owner, Value>,
+        storage storageKeyPath: ReferenceWritableKeyPath<Owner, FromArray>
+        ) -> PropertyType {
+        get {
+          observed[keyPath: storageKeyPath].wrappedValue
+        }
+      }
+
+    public init(_ block: @escaping ([Value]) -> PropertyType, _ affecting: KeyPath<Owner, ObservableArray<Value>>) {
+        
+        self.affectings = affecting
+        self.block = block
+    }
+    
+    var storedValue: PropertyType?
+    public var wrappedValue: PropertyType {
+        storedValue ?? block(owner[keyPath: affectings].wrappedValue)
+    }
+    
+    func updateStoredValue() {
+        storedValue = block(owner[keyPath: affectings].wrappedValue)
     }
 }
 
